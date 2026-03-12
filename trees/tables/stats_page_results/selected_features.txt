@@ -1,0 +1,6 @@
+Selected features:
+Page@num. types
+Page@function words ratio
+Page@word length
+
+Score: 0.5956616966599901
