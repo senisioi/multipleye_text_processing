@@ -244,7 +244,7 @@ def main():
         try:
             stimuli = input_file_to_stimuli(xlsx_path, ext=ext, write_json=args.write_json)
         except Exception as e:
-            print(f"[SKIPPING] Error processing {xlsx_path}: {e}")
+            print(f"[SKIPPING]: Error processing {xlsx_path}: {e}")
             continue
         nlp = load_nlp(lang)
         df = stimuli_to_df(stimuli, lang, nlp)
