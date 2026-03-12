@@ -241,7 +241,11 @@ def main():
         xlsx_path = os.path.join(args.in_dir, fn)
         
         print(f"\n=== {lang} ===")
-        stimuli = input_file_to_stimuli(xlsx_path, ext=ext, write_json=args.write_json)
+        try:
+            stimuli = input_file_to_stimuli(xlsx_path, ext=ext, write_json=args.write_json)
+        except Exception as e:
+            print(f"[SKIPPING] Error processing {xlsx_path}: {e}")
+            continue
         nlp = load_nlp(lang)
         df = stimuli_to_df(stimuli, lang, nlp)
         save_per_stimulus_csv(df, args.out_dir, lang)
