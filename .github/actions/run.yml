@@ -1,0 +1,39 @@
+name: Generate CSV
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run data download script
+        run: |
+          bash get_data.sh
+
+      - name: Run docker compose
+        run: docker compose up
+
+      - name: Upload generated CSV
+        uses: actions/upload-artifact@v4
+        with:
+          name: mulitipleye_annotations
+          path: mulitipleye_annotations/
+
+      - name: Upload tables
+        uses: actions/upload-artifact@v4
+        with:
+          name: tables
+          path: tables/
+
+      - name: Upload trees
+        uses: actions/upload-artifact@v4
+        with:
+          name: trees
+          path: trees/

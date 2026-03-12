@@ -1,0 +1,33 @@
+FROM mambaorg/micromamba:1.5.8
+
+USER root
+
+WORKDIR /app
+
+# Copy only the environment file into the image
+COPY requirements/c_hebspacy.yml /tmp/environment.yml
+
+# Create env (micromamba base image runs as user 'micromamba')
+RUN micromamba create -y -n hebcsv -f /tmp/environment.yml && \
+    micromamba clean -a -y
+
+# Use the env by default for subsequent RUN/CMD
+ENV MAMBA_DOCKERFILE_ACTIVATE=1
+
+
+#FROM python:3.8-slim
+#WORKDIR /app
+
+#RUN apt-get update && apt-get install -y --no-install-recommends \
+#    build-essential \
+#    cmake \
+#    pkg-config \
+#    curl \
+#    rustc \
+#    cargo \
+#  && rm -rf /var/lib/apt/lists/*
+
+#RUN python -m pip install --upgrade pip setuptools wheel
+
+#COPY requirements/c_hebrew.txt /app/requirements.txt
+#RUN pip install --no-cache-dir -r /app/requirements.txt

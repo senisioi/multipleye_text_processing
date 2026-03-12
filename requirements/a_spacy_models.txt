@@ -1,0 +1,4 @@
+pandas
+openpyxl
+tqdm
+spacy>=3.7,<4.0

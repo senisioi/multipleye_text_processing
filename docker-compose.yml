@@ -1,0 +1,112 @@
+services:
+
+  featurize:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.featurize
+    image: snisioi/multipleye_featurize:latest
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: sh -c "python generate_tables.py multipleye_annotations/ tables/ && python plot_tree.py tables/stats_page.csv"
+    depends_on:
+      all:
+        condition: service_completed_successfully
+      tr:
+        condition: service_completed_successfully
+      fa:
+        condition: service_completed_successfully
+      hi:
+        condition: service_completed_successfully
+      yue:
+        condition: service_completed_successfully
+      he:
+        condition: service_completed_successfully
+
+  all:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.all
+    image: snisioi/multipleye_all:latest
+    environment:
+      ANONYMIZE: ${ANONYMIZE}
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: python run_a_spacy_models.py --in-dir languages_data --out-dir multipleye_annotations
+  
+  tr:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.tr
+    image: snisioi/multipleye_tr:latest
+    environment:
+      ANONYMIZE: ${ANONYMIZE}
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: python run_b_tr_core_news_lg.py --in-dir languages_data --out-dir multipleye_annotations
+
+  fa:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.fa
+    image: snisioi/multipleye_fa:latest
+    environment:
+      ANONYMIZE: ${ANONYMIZE}
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: python run_b_fa_hazm.py --in-dir languages_data --out-dir multipleye_annotations
+
+  hi:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.hi
+    image: snisioi/multipleye_hi:latest
+    environment:
+      ANONYMIZE: ${ANONYMIZE}
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: python run_b_hi_indicnlp.py --in-dir languages_data --out-dir multipleye_annotations
+
+  yue:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.yue
+    image: snisioi/multipleye_yue:latest
+    environment:
+      ANONYMIZE: ${ANONYMIZE}
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: python run_b_yue_pycantonese.py --in-dir languages_data --out-dir multipleye_annotations
+
+  he:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.he
+    image: snisioi/multipleye_he:latest
+    environment:
+      ANONYMIZE: ${ANONYMIZE}
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command:  micromamba run -n hebcsv python run_b_he_hebspacy.py --in-dir languages_data --out-dir multipleye_annotations
+
+
+  # urduhack does not work in docker
+  ur:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.ur
+    image: snisioi/multipleye_u:latest
+    environment:
+      ANONYMIZE: ${ANONYMIZE}
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: micromamba run -n urduhackcsv  python run_b_ur_urduhack.py --in-dir languages_data --out-dir multipleye_annotations
+    profiles:
+      - donotstart

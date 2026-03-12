@@ -1,0 +1,26 @@
+name: hebcsv
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pandas
+  - openpyxl
+  - tqdm
+  - numpy<2
+  - spacy=3.8
+  - spacy-transformers
+  - sentencepiece
+  - tokenizers
+  - transformers
+  - pytorch
+  - pip
+  - pip:
+    - hebspacy==0.1.7
+    # Model wheel from GitHub releases (installs the he_ner_news_trf package)
+    - https://github.com/8400TheHealthNetwork/HebSpacy/releases/download/he_ner_news_trf-3.2.1/he_ner_news_trf-3.2.1-py3-none-any.whl
+
+# Usage:
+# conda env create -f environment.yml
+# conda activate hebcsv
+# python generate_hebrew_csv.py --input /path/to/your.xlsx --out-dir /path/for/csvs
+# created by Ella Lion, Technion

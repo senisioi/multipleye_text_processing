@@ -1,0 +1,4 @@
+pandas
+openpyxl
+tqdm
+tr_core_news_lg @ https://huggingface.co/turkish-nlp-suite/tr_core_news_lg/resolve/main/tr_core_news_lg-1.0-py3-none-any.whl
